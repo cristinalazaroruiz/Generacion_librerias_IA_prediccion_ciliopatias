@@ -262,10 +262,13 @@ df_no_supervised_scaled <- as.data.frame(scale(df_no_supervised))
 ##PCA
 library(stats)
 library(factoextra)
+library(openxlsx)
 pca.result <- prcomp(df_no_supervised_scaled, center = TRUE, scale = FALSE)
 fviz_eig(pca.result, labels = TRUE) 
 tabla_eigenvalues <- get_eigenvalue(pca.result)
-tabla_eigenvalues
+df_eigenvalues <- as.data.frame(tabla_eigenvalues)
+colnames(df_eigenvalues) <- c("eigenvalues", "porcentaje varianza", "varianza acumulada")
+write.xlsx(df_eigenvalues, rowNames = TRUE, "Anexo3.xlsx")
 pca.df <- as.data.frame(pca.result$x)
 ggplot(pca.df, aes(x = PC1, y = PC2, color = label$type))+
   geom_point(size = 5) +
@@ -292,7 +295,6 @@ print(KMO_parameter)
 df_KMO <- as.data.frame(KMO_parameter$MSAi)
 colnames(df_KMO) <- "KMO"
 df_KMO$KMO <- round(df_KMO$KMO, 2)
-library(openxlsx)
 write.xlsx(df_KMO, rowNames = TRUE, "KMO.xlsx")
 #Criterio:
   
