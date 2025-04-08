@@ -289,7 +289,11 @@ library(psych)
 dim(df_no_supervised)
 KMO_parameter <- KMO(cor(df_no_supervised_scaled))
 print(KMO_parameter)
-
+df_KMO <- as.data.frame(KMO_parameter$MSAi)
+colnames(df_KMO) <- "KMO"
+df_KMO$KMO <- round(df_KMO$KMO, 2)
+library(openxlsx)
+write.xlsx(df_KMO, rowNames = TRUE, "KMO.xlsx")
 #Criterio:
   
 #Above 0.90 - Marvelous
