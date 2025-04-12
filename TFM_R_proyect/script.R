@@ -435,8 +435,8 @@ kmeans.result <- kmeans(df_no_supervised_scaled, centers = 3, iter.max=100,
                         algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
                                       "MacQueen"), nstart = 25)
 
-kmeans_euclidean.plot <- fviz_cluster(kmeans.result, data = df_no_supervised_scaled, xlab = "",
-             ylab ="")+ggtitle("K-means distancia euclidiana", subtitle = "")+
+kmeans_euclidean.plot <- fviz_cluster(kmeans.result, data = df_no_supervised_scaled, xlab = "Dimension 1",
+             ylab ="Dimension 2")+ggtitle("K-means distancia euclidiana", subtitle = "")+
   theme_minimal() #Parece que si se pueden visualizar tres grupos 
 
 kmeans_euclidean.plot
@@ -467,8 +467,8 @@ kmeans_euclidean.var
 library(cluster)
 pam.result_manhattan <- pam(df_no_supervised_scaled, k = 3, metric = "manhattan")
 
-kmeans_manhattan.plot <- fviz_cluster(pam.result_manhattan, data = df_no_supervised_scaled, xlab = "",
-             ylab ="")+ggtitle("K-means distancia Manhattan", subtitle = "")+
+kmeans_manhattan.plot <- fviz_cluster(pam.result_manhattan, data = df_no_supervised_scaled, xlab = "Dimension 1",
+             ylab ="Dimension 2")+ggtitle("K-means distancia Manhattan", subtitle = "")+
   theme_minimal() #Parece que si se pueden visualizar tres grupos 
 
 kmeans_manhattan.plot
