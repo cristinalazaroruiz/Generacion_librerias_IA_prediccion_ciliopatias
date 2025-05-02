@@ -2,7 +2,7 @@
 
 import xml.etree.ElementTree as ET #cargar y parsear el xml 
 import pandas as pd 
-from orphanet_API import ciliopathies_diseases_codes #lista con los codigos relacionados con las ciliopatias
+from orphanet_API import ciliopathies_diseases_codes, new_ciliopathies_diseases_codes #lista con los codigos relacionados con las ciliopatias
 import re
 
 # Cargar el XML
@@ -72,68 +72,68 @@ df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
 #De este datafarme habria que eliminar las enfermedades relacionadas con las ciliopatias
 #Para ello, eliminamos las filas que contengan ORPHACODES relacionados con las cilipatias (script ORPHANET_API.py)
 
-df_hpo = df_hpo[~df_hpo["OrphaCode"].isin(ciliopathies_diseases_codes)]
+df_hpo = df_hpo[~df_hpo["HPO_ID"].isin(new_ciliopathies_diseases_codes)]
 
 #Podemos tambien hacer una doble comprobacion de que no hay ciliopatias, buscando eliminar tambien las filas con palabras clave relacionadas con ciliopatias: 
 nombres_cilipatias = [
-"acrocallosal"                                                                            
-"al gazali bakalinova"                                                                    
-"autosomal dominant polycystic kidney"                                                     
-"autosomal recessive polycystic kidney"                                                    
-"polycystic kidney disease"                                                                        
-"infantile polycystic kidney"                                                              
-"bilateral polycystic kidney"                                                              
-"alström"                                                                                 
-"bardet biedl"                                                                            
-"bazex dupré christol"                                                                    
-"biliary renal neurologic and skeletal"                                                
-"caroli"                                                                                   
-"cranioectodermal dysplasia"                                                                       
-"coach"                                                                                   
-"ellis van creveld"                                                                       
-"greig cephalopolysyndactyly"                                                             
-"hydrolethalus"                                                                           
-"joubert"                                                                                 
-"kallmann"                                                                                
-"mckusick kaufman"                                                                        
-"meckel gruber"                                                                           
-"morbid obesity and spermatogenic failure"                                                         
-"nephronophthisis"                                                                                 
-"complex lethal osteochondrodysplasia"                                                             
-"lowe oculocerebrorenal"                                                                  
-"orofaciodigital"                                                                         
-"primary ciliary dyskinesia"                                                                       
-"retinal dystrophy"                                                                                
-"renal hepatic pancreatic dysplasia"                                                               
-"rhyns"                                                                                  
-"senior løken"                                                                            
-"smith lemli opitz"                                                                       
-"spondylometaphyseal"                                                                    
-"short rib thoracic"                                                                     
-"stromme"                                                                                 
-"weyers acrofacial dysostosis"                                                                     
-"ataxia telangiectasia like"                                                              
-"birt hogg dubé"                                                                          
-"cornelia de lange"                                                                       
-"cone rod dystrophy"                                                                               
-"carpenter"                                                                               
-"juvenile myoclonic epilepsy"                                                                      
-"congenital heart disease"                                                                         
-"holoprosencephaly"                                                                                
-"visceral heterotaxy"                                                                              
-"leber congenital amaurosis"                                                                       
-"laurence moon"                                                                           
-"multinucleated neurons anhydramnios renal dysplasia cerebellar hypoplasia and hydranencephaly"
-"medulloblastoma"                                                                                  
-"mental retardation truncal obesity retinal dystrophy and micropenis"                           
-"neonatal sclerosing cholangitis"                                                                  
-"pallister hall"                                                                          
-"retinitis pigmentosa"                                                                             
-"spinocerebellar ataxia"                                                                           
-"simpson golabi behmel"                                                                   
-"short stature onychodysplasia facial dysmorphism and hypotrichosis"                            
-"star syndrome"                                                                                    
-"townes brocks"                                                                           
+"acrocallosal",                                                                            
+"al gazali bakalinova",                                                                    
+"autosomal dominant polycystic kidney",                                                     
+"autosomal recessive polycystic kidney",                                                    
+"polycystic kidney disease",                                                                        
+"infantile polycystic kidney",                                                              
+"bilateral polycystic kidney",                                                              
+"alström",                                                                                 
+"bardet biedl",                                                                            
+"bazex dupré christol",                                                                    
+"biliary renal neurologic and skeletal",                                                
+"caroli",                                                                                   
+"cranioectodermal dysplasia",                                                                       
+"coach",                                                                                   
+"ellis van creveld",                                                                       
+"greig cephalopolysyndactyly",                                                             
+"hydrolethalus",                                                                           
+"joubert",                                                                                 
+"kallmann",                                                                                
+"mckusick kaufman",                                                                        
+"meckel gruber",                                                                           
+"morbid obesity and spermatogenic failure",                                                         
+"nephronophthisis",                                                                                 
+"complex lethal osteochondrodysplasia",                                                             
+"lowe oculocerebrorenal",                                                                  
+"orofaciodigital",                                                                         
+"primary ciliary dyskinesia",                                                                       
+"retinal dystrophy",                                                                                
+"renal hepatic pancreatic dysplasia",                                                               
+"rhyns",                                                                                  
+"senior løken",                                                                            
+"smith lemli opitz",                                                                       
+"spondylometaphyseal",                                                                    
+"short rib thoracic",                                                                     
+"stromme",                                                                                 
+"weyers acrofacial dysostosis",                                                                     
+"ataxia telangiectasia like",                                                              
+"birt hogg dubé",                                                                          
+"cornelia de lange",                                                                       
+"cone rod dystrophy",                                                                               
+"carpenter",                                                                               
+"juvenile myoclonic epilepsy",                                                                      
+"congenital heart disease",                                                                         
+"holoprosencephaly",                                                                                
+"visceral heterotaxy",                                                                              
+"leber congenital amaurosis",                                                                       
+"laurence moon",                                                                           
+"multinucleated neurons anhydramnios renal dysplasia cerebellar hypoplasia and hydranencephaly",
+"medulloblastoma",                                                                                  
+"mental retardation truncal obesity retinal dystrophy and micropenis",                           
+"neonatal sclerosing cholangitis",                                                                  
+"pallister hall",                                                                          
+"retinitis pigmentosa",                                                                             
+"spinocerebellar ataxia",                                                                           
+"simpson golabi behmel",                                                                   
+"short stature onychodysplasia facial dysmorphism and hypotrichosis",                            
+"star syndrome",                                                                                    
+"townes brocks",                                                                           
 "usher"]
 
 #elaboramos el patron

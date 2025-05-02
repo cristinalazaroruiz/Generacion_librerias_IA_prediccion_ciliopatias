@@ -43,3 +43,14 @@ ciliopathies_diseases_codes = [
     294415, 3156, 93591, 93592, 93589, 110, 220497, 3032, 294415, 3156, 791, 1872, 244, 1871, 791, 1872, 65, 886, 363250, 156162, 156165, 156183, 156180,
     156168, 156171, 156174, 156177]
 
+new_ciliopathies_diseases_codes = []
+
+for c in ciliopathies_diseases_codes:
+    #l = "{:07d}".format(c)
+    #l = f"HP:{l}"
+    #new_ciliopathies_diseases_codes.append(l)
+    #new_ciliopathies_diseases_codes.append(int("{:07d}".format(c)))
+    new_ciliopathies_diseases_codes.append(f"HP:{str(c).zfill(7)}")
+
+print(new_ciliopathies_diseases_codes)
+
