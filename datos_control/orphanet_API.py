@@ -31,7 +31,6 @@ print(df_disorders)
 
 #Algo no funciona. La documentacion es: https://api.orphacode.org/#/All%20Orphanet%20clinical%20entities/list_entities
 #Me da error 401 
-#TODO: revisar por que me da error 
 
 #Como no me dan acceso a la API, he tenido que recuperar los codigos de manera manual (a traves de la interfaz de ORPHANET)
 #Esto me parece un poco chapucero pero no se me ocurre otra forma
@@ -39,11 +38,15 @@ print(df_disorders)
 ciliopathies_diseases_codes = [
     122, 65759, 457378, 380, 658805, 2189, 464366, 557003, 508501, 314394, 2666, 64, 730, 88924, 731, 110,  1515, 289, 474, 1454,
     2318, 220497, 444069, 439897, 88949, 2473, 564, 500135, 534, 352540, 672, 140976, 294415,140969, 84081, 3156, 506307, 805,
-    88950, 892, 93591,93592, 93589, 64, 289, 474, 454, 220493, 75858, 564, 3085, 506307, 110, 2377, 2473, 110, 220497, 3032,
+    88950, 892, 93591,93592, 93589, 64, 289, 474, 1454, 220493, 75858, 564, 3085, 506307, 110, 2377, 2473, 110, 220497, 3032,
     294415, 3156, 93591, 93592, 93589, 110, 220497, 3032, 294415, 3156, 791, 1872, 244, 1871, 791, 1872, 65, 886, 363250, 156162, 156165, 156183, 156180,
     156168, 156171, 156174, 156177]
+#Tenemos duplicados, los eliminamos
+ciliopathies_diseases_codes = list(set(ciliopathies_diseases_codes))
 
-new_ciliopathies_diseases_codes = []
+#Ahora tenemos que dejar los codigos con el mismo formato que tenemos en el dataframe de orphanet_info.py
+
+'''new_ciliopathies_diseases_codes = []
 
 for c in ciliopathies_diseases_codes:
     #l = "{:07d}".format(c)
@@ -53,4 +56,4 @@ for c in ciliopathies_diseases_codes:
     new_ciliopathies_diseases_codes.append(f"HP:{str(c).zfill(7)}")
 
 print(new_ciliopathies_diseases_codes)
-
+#ya podemos importar esta lista en orphanet_info.py'''

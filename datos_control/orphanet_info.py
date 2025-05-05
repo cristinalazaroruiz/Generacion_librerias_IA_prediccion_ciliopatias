@@ -2,7 +2,7 @@
 
 import xml.etree.ElementTree as ET #cargar y parsear el xml 
 import pandas as pd 
-from orphanet_API import ciliopathies_diseases_codes, new_ciliopathies_diseases_codes #lista con los codigos relacionados con las ciliopatias
+from orphanet_API import ciliopathies_diseases_codes #lista con los codigos relacionados con las ciliopatias
 import re
 
 # Cargar el XML
@@ -72,7 +72,7 @@ df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
 #De este datafarme habria que eliminar las enfermedades relacionadas con las ciliopatias
 #Para ello, eliminamos las filas que contengan ORPHACODES relacionados con las cilipatias (script ORPHANET_API.py)
 
-df_hpo = df_hpo[~df_hpo["HPO_ID"].isin(new_ciliopathies_diseases_codes)]
+df_hpo = df_hpo[~df_hpo["HPO_ID"].isin(ciliopathies_diseases_codes)]
 
 #Podemos tambien hacer una doble comprobacion de que no hay ciliopatias, buscando eliminar tambien las filas con palabras clave relacionadas con ciliopatias: 
 nombres_cilipatias = [
@@ -143,29 +143,35 @@ df_hpo_sin_ciliopatias = df_hpo[~df_hpo["DisorderName"].str.lower().str.contains
 
 df_hpo_sin_ciliopatias.to_excel("HPO_sin_ciliopatias.xlsx")
 
-#Algo no funciona, porque el excel HPO_enfermedad y HPO_sin_ciliopatias tienen las mismas filas (no se han eliminado observaciones)
-#TODO: revisar por que no funcionan los filtros para eliminar las ciliopatias
+#Tenemos demasiados registros. Nos quedamos con una muestra aleatoria (vamos a probar con 750)
+dfo_sample = df_hpo_sin_ciliopatias.sample(n = 750, random_state = 1)
+dfo_sample.to_excel("Sample_sin_cilipatias.xlsx")
 
 
 #Tenemos que convertir los HPO es la clasificacion que tenemos en el dataset con las ciliopatias
-# Obtenemos todos los HPOs únicos en forma de diccionario hpo_id:hpo_term
-hpo_dict = dict()
+# Obtenemos todos los HPOs únicos en forma de diccionario hpo_id:hpo_term y añadimos una columna para la clasificacion
+hpo_id = dfo_sample["HPO_ID"].to_list()
+hpo_term = dfo_sample["HPO_Term"].to_list()
+hpo_dict = dict(zip(hpo_id, hpo_term))
 
+#creamos un dataframe con esta informaion
+hpo_unicos = pd.DataFrame({
+    "HPO_ID": list(hpo_dict.keys()),
+    "HPO_Term":list(hpo_dict.values()),
+    "Clasificacion": ["NA" for _ in range(len(hpo_dict))]
+})
+
+#Guardamos en un excel esta informacion
+hpo_unicos.to_excel("HPO_codigo_nombre.xlsx")
+
+'''hpo_dict = dict()
 for r in resultados:
     for hpo_id, hpo_term in r["HPO_List"]:
         if hpo_id not in hpo_dict:
             hpo_dict[hpo_id] = hpo_term
         
-print(hpo_dict)
+print(hpo_dict)''' 
 
-#creamos un dataframe con esta informaion
-hpo_unicos = pd.DataFrame({
-    "HPO_ID": hpo_dict.keys(),
-    "HPO_Term":hpo_dict.values()
-})
-
-#Guardamos en un excel esta informacion
-hpo_unicos.to_excel("HPO_codigo_nombre.xlsx")
 
 #Ahora hay que agrupar estos HPO en las siguientes categorias: 
 
