@@ -162,7 +162,7 @@ hpo_unicos = pd.DataFrame({
 })
 
 #Guardamos en un excel esta informacion
-hpo_unicos.to_excel("HPO_codigo_nombre.xlsx")
+hpo_unicos.to_excel("HPO_codigo_nombre2.xlsx")
 
 '''hpo_dict = dict()
 for r in resultados:
@@ -192,11 +192,19 @@ Respiratory_Anomalies = []
 Skeletal_Anomalies = []
 Liver_Anomalies = []
 
-#No se como hacer esto de forma automatica, hay 8601 terminos
-#TODO: mirar como convertir los HPO terms en los grupos que tenemos en los datos de ciliopatias
-
-
-
-
+#TODO: ¿hay alguna forma de hacer esto de manera automatica?
+#Por ahora lo he hecho un poco chapuzero y a mano, pero bueno
+#Sobre el excel HPO_codigo_nombre he ido añadiendo mi clasificacion a mano. Volvemos a cargar ese dataframe y lo combinamos con Sample_sin_cilipatias
+dfo_hpo_clasificacion = pd.read_excel("HPO_codigo_nombre.xlsx")
+dfo_hpo_clasificacion = dfo_hpo_clasificacion[["HPO_ID", "Clasificacion"]]
+print(dfo_hpo_clasificacion)
+dfo_merge = dfo_sample.merge(dfo_hpo_clasificacion, on = "HPO_ID")
+print(dfo_merge)
+#Tenemos que convertir dfo_merge en un dataframe donde cada elemento de la clasificacion sea una nueva variable y se indique la presencia (1) o asuencia (0) de cada sintoma por cada enfermedad
+df_binario = pd.crosstab(
+    [dfo_merge['OrphaCode'], dfo_merge['DisorderName']],
+    dfo_merge['Clasificacion']
+)
+df_binario.to_excel("prueba.xlsx")
 
 
