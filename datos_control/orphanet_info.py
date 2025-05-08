@@ -9,8 +9,6 @@ import re
 tree = ET.parse("en_product4 (1).xml")  # Cambia esto por la ruta a tu archivo
 root = tree.getroot()
 
-print(ET.tostring(root, encoding='utf8').decode('utf8')) #para ver todo el xml mejor 
-
 
 # Recorremos cada enfermedad con OrphaCode
 resultados = []
@@ -43,8 +41,6 @@ def mostrar_resultados(lista):
             print(f"  - {hpo_id}: {hpo_term}")
         print("------") 
 
-#Si queremos mostrar los resultados: 
-mostrar_resultados(resultados)
 
 #Convertir a dataframe
 df = pd.DataFrame(resultados)
@@ -65,9 +61,6 @@ for r in resultados:
 
 # Crear el nuevo DataFrame
 df_hpo = pd.DataFrame(hpo_rows)
-
-# Guardarlo en excel
-df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
 
 #De este datafarme habria que eliminar las enfermedades relacionadas con las ciliopatias
 #Para ello, eliminamos las filas que contengan ORPHACODES relacionados con las cilipatias (script ORPHANET_API.py)
@@ -141,11 +134,25 @@ patron = "|".join(nombres_cilipatias)
 
 df_hpo_sin_ciliopatias = df_hpo[~df_hpo["DisorderName"].str.lower().str.contains(patron, na= False)]
 
-df_hpo_sin_ciliopatias.to_excel("HPO_sin_ciliopatias.xlsx")
 
 #Tenemos demasiados registros. Nos quedamos con una muestra aleatoria (vamos a probar con 750)
 dfo_sample = df_hpo_sin_ciliopatias.sample(n = 750, random_state = 1)
-dfo_sample.to_excel("Sample_sin_cilipatias.xlsx")
+
+#! Prueba
+dfo_sample2 = df_hpo_sin_ciliopatias.sample(n = 1000, random_state=1)
+#nos quedamo solo con los HPO seleccionados:
+hpo_id2 = dfo_sample2["HPO_ID"].to_list()
+hpo_term2 = dfo_sample2["HPO_Term"].to_list()
+hpo_dict2 = dict(zip(hpo_id2, hpo_term2))
+
+#creamos un dataframe con esta informaion
+hpo_unicos2 = pd.DataFrame({
+    "HPO_ID": list(hpo_dict2.keys()),
+    "HPO_Term":list(hpo_dict2.values()),
+    "Clasificacion": ["NA" for _ in range(len(hpo_dict2))]
+})
+
+#! Fin prueba
 
 
 #Tenemos que convertir los HPO es la clasificacion que tenemos en el dataset con las ciliopatias
@@ -161,8 +168,7 @@ hpo_unicos = pd.DataFrame({
     "Clasificacion": ["NA" for _ in range(len(hpo_dict))]
 })
 
-#Guardamos en un excel esta informacion
-hpo_unicos.to_excel("HPO_codigo_nombre2.xlsx")
+
 
 '''hpo_dict = dict()
 for r in resultados:
@@ -197,14 +203,32 @@ Liver_Anomalies = []
 #Sobre el excel HPO_codigo_nombre he ido añadiendo mi clasificacion a mano. Volvemos a cargar ese dataframe y lo combinamos con Sample_sin_cilipatias
 dfo_hpo_clasificacion = pd.read_excel("HPO_codigo_nombre.xlsx")
 dfo_hpo_clasificacion = dfo_hpo_clasificacion[["HPO_ID", "Clasificacion"]]
-print(dfo_hpo_clasificacion)
+
 dfo_merge = dfo_sample.merge(dfo_hpo_clasificacion, on = "HPO_ID")
-print(dfo_merge)
+
 #Tenemos que convertir dfo_merge en un dataframe donde cada elemento de la clasificacion sea una nueva variable y se indique la presencia (1) o asuencia (0) de cada sintoma por cada enfermedad
 df_binario = pd.crosstab(
     [dfo_merge['OrphaCode'], dfo_merge['DisorderName']],
     dfo_merge['Clasificacion']
 )
-df_binario.to_excel("prueba.xlsx")
 
 
+
+if __name__ == "__main__":
+    #para ver el XML mejor
+    print(ET.tostring(root, encoding='utf8').decode('utf8')) #para ver todo el xml mejor 
+
+    #mostrar los resultados del procesamiento del XML
+    mostrar_resultados(resultados)
+
+    # Guardarlo en excel toda la informacion sobre todas las enfermedades
+    df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
+
+    #Guardar enfermedades sin ciliopatias
+    df_hpo_sin_ciliopatias.to_excel("HPO_sin_ciliopatias.xlsx")
+
+    #Excel HPO sin ciliopatias para añadir clasificacion
+    hpo_unicos.to_excel("HPO_codigo_nombre2.xlsx")
+
+    #Excel final con la 
+    df_binario.to_excel("prueba.xlsx")
