@@ -64,8 +64,7 @@ df_hpo = pd.DataFrame(hpo_rows)
 
 #De este datafarme habria que eliminar las enfermedades relacionadas con las ciliopatias
 #Para ello, eliminamos las filas que contengan ORPHACODES relacionados con las cilipatias (script ORPHANET_API.py)
-
-df_hpo = df_hpo[~df_hpo["HPO_ID"].isin(ciliopathies_diseases_codes)]
+df_hpo = df_hpo[~df_hpo["OrphaCode"].isin(ciliopathies_diseases_codes)]
 
 #Podemos tambien hacer una doble comprobacion de que no hay ciliopatias, buscando eliminar tambien las filas con palabras clave relacionadas con ciliopatias: 
 nombres_cilipatias = [
@@ -138,27 +137,12 @@ df_hpo_sin_ciliopatias = df_hpo[~df_hpo["DisorderName"].str.lower().str.contains
 #Tenemos demasiados registros. Nos quedamos con una muestra aleatoria (vamos a probar con 750)
 dfo_sample = df_hpo_sin_ciliopatias.sample(n = 750, random_state = 1)
 
-#! Prueba
-dfo_sample2 = df_hpo_sin_ciliopatias.sample(n = 1000, random_state=1)
-#nos quedamo solo con los HPO seleccionados:
-hpo_id2 = dfo_sample2["HPO_ID"].to_list()
-hpo_term2 = dfo_sample2["HPO_Term"].to_list()
-hpo_dict2 = dict(zip(hpo_id2, hpo_term2))
-
-#creamos un dataframe con esta informaion
-hpo_unicos2 = pd.DataFrame({
-    "HPO_ID": list(hpo_dict2.keys()),
-    "HPO_Term":list(hpo_dict2.values()),
-    "Clasificacion": ["NA" for _ in range(len(hpo_dict2))]
-})
-
-#! Fin prueba
-
+dfo_sample2 = df_hpo_sin_ciliopatias.sample(n = 5000, random_state = 1)
 
 #Tenemos que convertir los HPO es la clasificacion que tenemos en el dataset con las ciliopatias
 # Obtenemos todos los HPOs únicos en forma de diccionario hpo_id:hpo_term y añadimos una columna para la clasificacion
-hpo_id = dfo_sample["HPO_ID"].to_list()
-hpo_term = dfo_sample["HPO_Term"].to_list()
+hpo_id = dfo_sample2["HPO_ID"].to_list()
+hpo_term = dfo_sample2["HPO_Term"].to_list()
 hpo_dict = dict(zip(hpo_id, hpo_term))
 
 #creamos un dataframe con esta informaion
@@ -225,7 +209,7 @@ if __name__ == "__main__":
     df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
 
     #Guardar enfermedades sin ciliopatias
-    df_hpo_sin_ciliopatias.to_excel("HPO_sin_ciliopatias.xlsx")
+    df_hpo_sin_ciliopatias.to_excel("Anexo_4.xlsx")
 
     #Excel HPO sin ciliopatias para añadir clasificacion
     hpo_unicos.to_excel("HPO_codigo_nombre2.xlsx")
