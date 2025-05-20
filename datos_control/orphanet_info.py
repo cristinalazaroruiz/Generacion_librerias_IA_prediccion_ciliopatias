@@ -3,7 +3,6 @@
 import xml.etree.ElementTree as ET #cargar y parsear el xml 
 import pandas as pd 
 from orphanet_API import ciliopathies_diseases_codes #lista con los codigos relacionados con las ciliopatias
-import re
 
 # Cargar el XML
 tree = ET.parse("en_product4 (1).xml")  # Cambia esto por la ruta a tu archivo
@@ -134,9 +133,6 @@ patron = "|".join(nombres_cilipatias)
 df_hpo_sin_ciliopatias = df_hpo[~df_hpo["DisorderName"].str.lower().str.contains(patron, na= False)]
 
 
-#Tenemos demasiados registros. Nos quedamos con una muestra aleatoria (vamos a probar con 750)
-dfo_sample = df_hpo_sin_ciliopatias.sample(n = 750, random_state = 1)
-
 dfo_sample2 = df_hpo_sin_ciliopatias.sample(n = 5000, random_state = 1)
 
 #Tenemos que convertir los HPO es la clasificacion que tenemos en el dataset con las ciliopatias
@@ -153,17 +149,7 @@ hpo_unicos = pd.DataFrame({
 })
 
 
-
-'''hpo_dict = dict()
-for r in resultados:
-    for hpo_id, hpo_term in r["HPO_List"]:
-        if hpo_id not in hpo_dict:
-            hpo_dict[hpo_id] = hpo_term
-        
-print(hpo_dict)''' 
-
-
-#Ahora hay que agrupar estos HPO en las siguientes categorias: 
+#Ahora hay que agrupar estos HPO en las siguientes categorias > script prueba_HPO.py
 
 Aural_Anomalies = []      
 Cerebral_Anomalies = []    
@@ -182,19 +168,9 @@ Respiratory_Anomalies = []
 Skeletal_Anomalies = []
 Liver_Anomalies = []
 
-#TODO: ¿hay alguna forma de hacer esto de manera automatica?
-#Por ahora lo he hecho un poco chapuzero y a mano, pero bueno
-#Sobre el excel HPO_codigo_nombre he ido añadiendo mi clasificacion a mano. Volvemos a cargar ese dataframe y lo combinamos con Sample_sin_cilipatias
-dfo_hpo_clasificacion = pd.read_excel("HPO_codigo_nombre.xlsx")
-dfo_hpo_clasificacion = dfo_hpo_clasificacion[["HPO_ID", "Clasificacion"]]
 
-dfo_merge = dfo_sample.merge(dfo_hpo_clasificacion, on = "HPO_ID")
 
-#Tenemos que convertir dfo_merge en un dataframe donde cada elemento de la clasificacion sea una nueva variable y se indique la presencia (1) o asuencia (0) de cada sintoma por cada enfermedad
-df_binario = pd.crosstab(
-    [dfo_merge['OrphaCode'], dfo_merge['DisorderName']],
-    dfo_merge['Clasificacion']
-)
+
 
 
 
@@ -211,8 +187,3 @@ if __name__ == "__main__":
     #Guardar enfermedades sin ciliopatias
     df_hpo_sin_ciliopatias.to_excel("Anexo_4.xlsx")
 
-    #Excel HPO sin ciliopatias para añadir clasificacion
-    hpo_unicos.to_excel("HPO_codigo_nombre2.xlsx")
-
-    #Excel final con la 
-    df_binario.to_excel("prueba.xlsx")
