@@ -1,7 +1,7 @@
-#Este script es para conectarse a la API de HPO, por si puede servir de algo (buscar informacion de cada HPO o algo asi)
+#Este script es para conectarse a la API de HPO, aunque al final no se ha usado para el estudio
 #Documentacion API: https://clinicaltables.nlm.nih.gov/apidoc/hpo/v3/doc.html
 import requests
-from orphanet_info import hpo_dict
+from orphanet_informacion import hpo_dict
 
 hpo_terms = list(hpo_dict.values())
 

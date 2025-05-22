@@ -1,4 +1,4 @@
-#Script para procesar el xml con las enfermedades raras y sus sintomas y generar un dataset de datos control 
+#Script para procesar el XML con las enfermedades raras y sus sintomas HPO, obtenido desde ORPHANET
 
 import xml.etree.ElementTree as ET #cargar y parsear el xml 
 import pandas as pd 
@@ -132,10 +132,10 @@ patron = "|".join(nombres_cilipatias)
 
 df_hpo_sin_ciliopatias = df_hpo[~df_hpo["DisorderName"].str.lower().str.contains(patron, na= False)]
 
-
+#Tenemos muchos registros, nos vamos a quedar con una muestra aleatoria de 5000 para seguir con el analisis
 dfo_sample2 = df_hpo_sin_ciliopatias.sample(n = 5000, random_state = 1)
 
-#Tenemos que convertir los HPO es la clasificacion que tenemos en el dataset con las ciliopatias
+#Tenemos que convertir los HPO en la clasificacion que tenemos en el dataset con las ciliopatias
 # Obtenemos todos los HPOs únicos en forma de diccionario hpo_id:hpo_term y añadimos una columna para la clasificacion
 hpo_id = dfo_sample2["HPO_ID"].to_list()
 hpo_term = dfo_sample2["HPO_Term"].to_list()
@@ -149,7 +149,7 @@ hpo_unicos = pd.DataFrame({
 })
 
 
-#Ahora hay que agrupar estos HPO en las siguientes categorias > script prueba_HPO.py
+#Ahora hay que agrupar estos HPO en las siguientes categorias > script clasificacion_HPO.py
 
 Aural_Anomalies = []      
 Cerebral_Anomalies = []    

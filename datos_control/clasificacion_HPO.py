@@ -1,10 +1,11 @@
 #script para categorizar los HPO y generar un dataframe con los datos control clasificados
-from orphanet_info import hpo_unicos, dfo_sample2
+
+from orphanet_informacion import hpo_unicos, dfo_sample2
 import obonet #para parsear archivos en formato OBO
 import networkx
 import pandas as pd
 from collections import defaultdict
-import re
+
 #Leer el fichero en formato OBO
 path_obo = r"C:\Users\crist\Desktop\codigo_TFM\Generacion_librerias_IA_prediccion_ciliopatias\datos_control\hp.obo" 
 #este fichero viene del repositorio oficial de HPO; https://github.com/obophenotype/human-phenotype-ontology?tab=readme-ov-file
@@ -93,6 +94,7 @@ category_keywords = {
 
 #Funcion para clasificar los terminos HPO teniendo en cuenta las palabras calve definidas y el fichero OBO precuperado
 #Esta funcion tiene en cuenta que un mismo HPO puede contener palabras clave de distintas categorias, por lo que se clasifica en la categoria con mas coincidencias
+#Para cada HPO se recuperan sus "ancestros" que pueden tener palabras calve mas sencillas relacionadas con las categorias
 
 def clasificar_hpo_terms(lista_hpo, graph, palabras_clave):
     clasificados = defaultdict(list)
@@ -127,9 +129,9 @@ def clasificar_hpo_terms(lista_hpo, graph, palabras_clave):
     return clasificados
 
 
-#generamos nuestra lista de hpo a partir del dataframe importado
+#generamos nuestra lista de HPOs a partir del dataframe importado
 hpo_list = list(hpo_unicos["HPO_ID"])
-#Clasificamos la lista de HPO
+#Clasificamos la lista de HPOs
 resultado = clasificar_hpo_terms(hpo_list, graph, category_keywords)
 
 #pasar a dataframe
@@ -165,13 +167,20 @@ df_binario = pd.crosstab(
 ).map(lambda x: 1 if x > 0 else 0) #por si hay mas de un HPO clasificado en un mismo grupo para una enfermedad
 
 
+#Para tener las clases balanceadas (misma cantidad ciliopatias y no ciliopatias) nos quedamos con tantos registros como hay en los datos de ciliopatias (511)
+df_control = df_binario.sample(n= 511, random_state = 1 ) 
 
-#TODO: seleccionar tantos registros de datos control como datos de ciliopatias haya (511 registros)
+#A este dataframe le añadimos una columna con la etiqueta "no ciliopatia"
+df_control["type"] = "No ciliopathy" #!este es el excel con el que vamos a seguir trabajando en R para el aprendizaje supervisado
+
 
 
 if __name__ == "__main__":
     #convertir df_clasificado a excel
     df_clasificado.to_excel("hpo_clasificados_final.xlsx")
 
-    #Excel final con los datos control finales
+    #Excel  con los datos control
     df_binario.to_excel("datos_control.xlsx")
+
+    #Sample datos control
+    df_control.to_excel("Anexo_5.xlsx")

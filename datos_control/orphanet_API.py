@@ -3,7 +3,7 @@
 import requests
 import pandas as pd 
 
-#Forma manual de recuperar los codigos OPRHACODES de las enfermedades relacioandas con las ciliopatias
+#Forma manual de recuperar los codigos OPRHACODES de las enfermedades relacionadas con las ciliopatias (usando la interfaz grafica de ORPHANET)
 
 ciliopathies_diseases_codes = [
     122, 65759, 457378, 380, 658805, 2189, 464366, 557003, 508501, 314394, 2666, 64, 730, 88924, 731, 110,  1515, 289, 474, 1454,
@@ -11,26 +11,13 @@ ciliopathies_diseases_codes = [
     88950, 892, 93591,93592, 93589, 64, 289, 474, 1454, 220493, 75858, 564, 3085, 506307, 110, 2377, 2473, 110, 220497, 3032,
     294415, 3156, 93591, 93592, 93589, 110, 220497, 3032, 294415, 3156, 791, 1872, 244, 1871, 791, 1872, 65, 886, 363250, 156162, 156165, 156183, 156180,
     156168, 156171, 156174, 156177]
+
 #Tenemos duplicados, los eliminamos
 ciliopathies_diseases_codes = list(set(ciliopathies_diseases_codes))
 
-#? Esto lo dejo por si acaso
-#Ahora tenemos que dejar los codigos con el mismo formato que tenemos en el dataframe de orphanet_info.py
-
-'''new_ciliopathies_diseases_codes = []
-
-for c in ciliopathies_diseases_codes:
-    #l = "{:07d}".format(c)
-    #l = f"HP:{l}"
-    #new_ciliopathies_diseases_codes.append(l)
-    #new_ciliopathies_diseases_codes.append(int("{:07d}".format(c)))
-    new_ciliopathies_diseases_codes.append(f"HP:{str(c).zfill(7)}")
-
-print(new_ciliopathies_diseases_codes)
-#ya podemos importar esta lista en orphanet_info.py'''
 
 
-#Forma automatica de recuperar estos codigos (me da error 401)
+#Forma automatica de recuperar estos codigos, via API (me da error 401)
 if __name__ == "__main__":
 
     #desde la interfaz de ORPHANET, podemos recuperar los codigos de los grupos de enfermedades relacionados con las ciliopatias
