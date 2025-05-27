@@ -380,7 +380,7 @@ clust_ward_manhattan <- fviz_dend(hclust_ward_manhattan,
 clust_ward_manhattan
 
 
-clust_single_euclidean <- fviz_dend(hclust_complete_euclidean,
+clust_single_euclidean <- fviz_dend(hclust_single_euclidean,
                                   cex = 0.5,
                                   k = 3, 
                                   palette = colors,
@@ -392,7 +392,7 @@ clust_single_euclidean
 
 
 
-clust_single_manhattan <- fviz_dend(hclust_complete_manhattan,
+clust_single_manhattan <- fviz_dend(hclust_single_manhattan,
                                       cex = 0.5,
                                       k = 3, 
                                       palette = colors,
@@ -476,7 +476,7 @@ kmeans_manhattan.plot
 
 #Pasamos tambien a df y a un grafico
 df_cluster_manhattan <- data.frame(ID = rownames(df_no_supervised_scaled),
-                                   cluster = pam.result$clustering)
+                                   cluster = pam.result_manhattan$clustering)
 
 
 df_cluster_manhattan2 <- dplyr::inner_join(df_cluster_manhattan, df_labels_ID, by = "ID")
