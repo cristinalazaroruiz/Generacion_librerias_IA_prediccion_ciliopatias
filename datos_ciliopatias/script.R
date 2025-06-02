@@ -170,7 +170,7 @@ df_genes_localizacion$Ciliopathy <- gsub(" ", ".", df_genes_localizacion$Ciliopa
 df_genes_localizacion$Ciliopathy <- gsub("-", ".", df_genes_localizacion$Ciliopathy) #cambiar guiones por puntos
 df_genes_localizacion$Ciliopathy <- gsub(",", ".", df_genes_localizacion$Ciliopathy) #cambiar comas por puntos
 df_genes_localizacion$Ciliopathy <- gsub("–", "-", df_genes_localizacion$Ciliopathy) #cambiar guion largo por puntos
-
+df_genes_localizacion$Ciliopathy <- gsub("-", ".", df_genes_localizacion$Ciliopathy)
 df_unido$Ciliopathy <- tolower(df_unido$Ciliopathy) #pasar todo a minusculas
 df_genes_localizacion$Ciliopathy <- tolower(df_genes_localizacion$Ciliopathy) #pasar todo a minusculas
 
