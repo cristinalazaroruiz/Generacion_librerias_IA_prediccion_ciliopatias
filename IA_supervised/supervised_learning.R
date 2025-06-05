@@ -242,5 +242,321 @@ write.xlsx(df.confusion.gb, file = "matriz_gb.xlsx")
 
 
 
+################################################################################
+#                       CURVAS DE APRENDIZAJE
+################################################################################
+
+#curva de aprendizaje para SVMlinear
+curvas_error = list()
+curvas_precision = list()
+
+set.seed(1234)
+
+# Definir tamaños de entrenamiento
+training_sizes <- seq(0.1, 1.0, by = 0.1)  # 10% a 100%
+
+# Vectores para guardar errores y precision
+train_errors_svmlinear <- c()
+val_errors_svmlinear <- c()
+train_accuracy_svmlinear <- c()
+val_accuracy_svmlinear <- c()
+
+for (p in training_sizes) {
+  # Muestra aleatoria del conjunto de entrenamiento
+  indices <- sample(1:nrow(df_train), size = floor(p * nrow(df_train)))
+  train_subset <- df_train[indices, ]
+  
+  # Ajustar modelo con el subconjunto de entrenamiento
+  model <- train(type ~ ., 
+                 data = train_subset, 
+                 method = "svmLinear", 
+                 trControl = trainControl(method = "cv", number = 10), 
+                 preProcess = c("center", "scale"),
+                 tuneGrid = expand.grid(C = 0.1)) 
+  
+  # Error y precision de entrenamiento
+  train_pred <- predict(model, newdata = train_subset)
+  train_acc <- mean(train_pred == train_subset$type)
+  train_errors_svmlinear <- c(train_errors_svmlinear, 1 - train_acc)
+  train_accuracy_svmlinear <- c(train_accuracy_svmlinear, train_acc)
+  
+  
+  # Error de validación (en el conjunto de prueba completo)
+  val_pred <- predict(model, newdata = df_test)
+  val_acc <- mean(val_pred == df_test$type)
+  val_errors_svmlinear <- c(val_errors_svmlinear, 1 - val_acc)
+  val_accuracy_svmlinear <- c(val_accuracy_svmlinear, val_acc)
+}
+
+# DataFrame para graficar la curva de error
+df_curve_error_svmlineal <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingError = train_errors_svmlinear,
+  ValidationError = val_errors_svmlinear
+)
+
+# Graficar la curva de error 
+curva_error_svmlineal <- ggplot(df_curve_error_svmlineal, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingError, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationError, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Error de clasificación",
+       color = "Conjunto") + ggtitle("Curva de pérdida - SVM Lineal")+
+  theme_minimal()
+
+
+#Dataframe curva de precision
+df_accuracy_svmlinear <- data.frame(
+  TrainingSize = training_sizes_SVMlinear * 100,
+  TrainingAccuracy = train_accuracy_svmlinear,
+  ValidationAccuracy = val_accuracy_svmlinear
+)
+
+
+#curva de precision
+curva_precision_svmlineal <- ggplot(df_accuracy_svmlinear, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingAccuracy, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationAccuracy, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Precisión",
+       color = "Conjunto") +ggtitle("Curva de precision - SVM Lineal")+
+  theme_minimal()
+
+
+#añadimos las cruvas a las listas
+curvas_error <- c(curvas_error, list(svmlineal = curva_error_svmlineal))
+curvas_precision <- c(curvas_precision, list(svmlineal = curva_precision_svmlineal))
+
+#curva de aprendizaje para SVMradial
+
+# Vectores para guardar errores y precision
+train_errors_svmradial <- c()
+val_errors_svmradial <- c()
+train_accuracy_svmradial <- c()
+val_accuracy_svmradial <- c()
+
+for (p in training_sizes) {
+  # Muestra aleatoria del conjunto de entrenamiento
+  indices <- sample(1:nrow(df_train), size = floor(p * nrow(df_train)))
+  train_subset <- df_train[indices, ]
+  
+  # Ajustar modelo con el subconjunto de entrenamiento
+  model <- train(type ~ ., 
+                 data = train_subset, 
+                 method = "svmRadial", 
+                 trControl = trainControl(method = "cv", number = 10), 
+                 preProcess = c("center", "scale"),
+                 tuneGrid = expand.grid(C = 2,sigma = 0.05400961))  
+  
+  # Error y precision de entrenamiento
+  train_pred <- predict(model, newdata = train_subset)
+  train_acc <- mean(train_pred == train_subset$type)
+  train_errors_svmradial <- c(train_errors_svmradial, 1 - train_acc)
+  train_accuracy_svmradial <- c(train_accuracy_svmradial, train_acc)
+  
+  
+  # Error de validación (en el conjunto de prueba completo)
+  val_pred <- predict(model, newdata = df_test)
+  val_acc <- mean(val_pred == df_test$type)
+  val_errors_svmradial <- c(val_errors_svmradial, 1 - val_acc)
+  val_accuracy_svmradial <- c(val_accuracy_svmradial, val_acc)
+}
+
+# DataFrame para graficar la curva de error
+df_curve_error_svmradial <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingError = train_errors_svmradial,
+  ValidationError = val_errors_svmradial
+)
+
+# Graficar la curva de error 
+curva_error_svmradial <- ggplot(df_curve_error_svmradial, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingError, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationError, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Error de clasificación",
+       color = "Conjunto") + ggtitle("Curva de pérdida - SVM Radial")+
+  theme_minimal()
+
+
+#Dataframe curva de precision
+df_accuracy_svmradial <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingAccuracy = train_accuracy_svmradial,
+  ValidationAccuracy = val_accuracy_svmradial
+)
+
+
+#curva de precision
+curva_precision_svmradial <- ggplot(df_accuracy_svmradial, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingAccuracy, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationAccuracy, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Precisión",
+       color = "Conjunto") +ggtitle("Curva de precision - SVM Radial")+
+  theme_minimal()
+
+
+#añadimos las cruvas a las listas
+curvas_error <- c(curvas_error, list(svmradial = curva_error_svmradial))
+curvas_precision <- c(curvas_precision, list(svmradial = curva_precision_svmradial))
+
+
+#curva de aprendizaje para RandonForest
+
+# Vectores para guardar errores y precision
+train_errors_rf <- c()
+val_errors_rf <- c()
+train_accuracy_rf <- c()
+val_accuracy_rf <- c()
+
+for (p in training_sizes) {
+  # Muestra aleatoria del conjunto de entrenamiento
+  indices <- sample(1:nrow(df_train), size = floor(p * nrow(df_train)))
+  train_subset <- df_train[indices, ]
+  
+  # Ajustar modelo con el subconjunto de entrenamiento
+  model <- train(type ~ ., 
+                 data = train_subset, 
+                 method = "rf", 
+                 trControl = trainControl(method = "cv", number = 10), 
+                 preProcess = c("center", "scale"),
+                 tuneGrid = expand.grid(mtry = 5))  
+  
+  # Error y precision de entrenamiento
+  train_pred <- predict(model, newdata = train_subset)
+  train_acc <- mean(train_pred == train_subset$type)
+  train_errors_rf <- c(train_errors_rf, 1 - train_acc)
+  train_accuracy_rf <- c(train_accuracy_rf, train_acc)
+  
+  
+  # Error de validación (en el conjunto de prueba completo)
+  val_pred <- predict(model, newdata = df_test)
+  val_acc <- mean(val_pred == df_test$type)
+  val_errors_rf <- c(val_errors_rf, 1 - val_acc)
+  val_accuracy_rf <- c(val_accuracy_rf, val_acc)
+}
+
+# DataFrame para graficar la curva de error
+df_curve_error_rf <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingError = train_errors_rf,
+  ValidationError = val_errors_rf
+)
+
+# Graficar la curva de error 
+curva_error_rf <- ggplot(df_curve_error_rf, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingError, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationError, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Error de clasificación",
+       color = "Conjunto") + ggtitle("Curva de pérdida - Bosque Aleatorio")+
+  theme_minimal()
+
+
+#Dataframe curva de precision
+df_accuracy_rf <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingAccuracy = train_accuracy_rf,
+  ValidationAccuracy = val_accuracy_rf
+)
+
+
+#curva de precision
+curva_precision_rf <- ggplot(df_accuracy_rf, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingAccuracy, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationAccuracy, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Precisión",
+       color = "Conjunto") +ggtitle("Curva de precision - Bosque Aleatorio")+
+  theme_minimal()
+
+
+#añadimos las cruvas a las listas
+curvas_error <- c(curvas_error, list(rf = curva_error_rf))
+curvas_precision <- c(curvas_precision, list(rf = curva_precision_rf))
+
+
+
+
+#curva de aprendizaje para xgboost
+
+# Vectores para guardar errores y precision
+train_errors_gb <- c()
+val_errors_gb <- c()
+train_accuracy_gb <- c()
+val_accuracy_gb <- c()
+
+for (p in training_sizes) {
+  # Muestra aleatoria del conjunto de entrenamiento
+  indices <- sample(1:nrow(df_train), size = floor(p * nrow(df_train)))
+  train_subset <- df_train[indices, ]
+  
+  # Ajustar modelo con el subconjunto de entrenamiento
+  model <- train(type ~ ., 
+                 data = train_subset, 
+                 method = "gbm", 
+                 trControl = trainControl(method = "cv", number = 10), 
+                 preProcess = c("center", "scale"),
+                 tuneGrid = expand.grid(n.trees = 100,
+                                        interaction.depth = 18,
+                                        shrinkage = 0.1,
+                                        n.minobsinnode = 10))  
+  
+  # Error y precision de entrenamiento
+  train_pred <- predict(model, newdata = train_subset)
+  train_acc <- mean(train_pred == train_subset$type)
+  train_errors_gb <- c(train_errors_gb, 1 - train_acc)
+  train_accuracy_gb <- c(train_accuracy_gb, train_acc)
+  
+  
+  # Error de validación (en el conjunto de prueba completo)
+  val_pred <- predict(model, newdata = df_test)
+  val_acc <- mean(val_pred == df_test$type)
+  val_errors_gb <- c(val_errors_gb, 1 - val_acc)
+  val_accuracy_gb <- c(val_accuracy_gb, val_acc)
+}
+
+# DataFrame para graficar la curva de error
+df_curve_error_gb <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingError = train_errors_gb,
+  ValidationError = val_errors_gb
+)
+
+# Graficar la curva de error 
+curva_error_gb <- ggplot(df_curve_error_gb, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingError, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationError, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Error de clasificación",
+       color = "Conjunto") + ggtitle("Curva de pérdida - Descenso de Gradiente")+
+  theme_minimal()
+
+
+#Dataframe curva de precision
+df_accuracy_gb <- data.frame(
+  TrainingSize = training_sizes * 100,
+  TrainingAccuracy = train_accuracy_gb,
+  ValidationAccuracy = val_accuracy_gb
+)
+
+
+#curva de precision
+curva_precision_gb <- ggplot(df_accuracy_gb, aes(x = TrainingSize)) +
+  geom_line(aes(y = TrainingAccuracy, color = "Entrenamiento")) +
+  geom_line(aes(y = ValidationAccuracy, color = "Validación")) +
+  labs(x = "Tamaño de conjunto de entrenamiento (%)",
+       y = "Precisión",
+       color = "Conjunto") +ggtitle("Curva de precision - Descenso de Gradiente")+
+  theme_minimal()
+
+
+#añadimos las cruvas a las listas
+curvas_error <- c(curvas_error, list(gb = curva_error_gb))
+curvas_precision <- c(curvas_precision, list(gb = curva_precision_gb))
+
+grid.arrange(grobs = curvas_error, ncol = 2)
+grid.arrange(grobs = curvas_precision, ncol = 2)
 
 
