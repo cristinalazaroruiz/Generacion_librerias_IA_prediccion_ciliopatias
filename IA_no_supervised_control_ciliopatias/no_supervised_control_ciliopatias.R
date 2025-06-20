@@ -207,6 +207,42 @@ grid.arrange(clust_ward_euclidean, clust_ward_manhattan,
 
 
 
+#graficos de barras
+
+# Paso 1: Crear la asignación de grupos con cutree()
+grupos_ward_euclidean <- data.frame(grupo = cutree(hclust_ward_euclidean, k = 2))
+
+# Paso 2: Añadir la columna de etiquetas
+grupos_ward_euclidean$type <- labels$type  
+# Paso 3: Asignar colores a cada grupo (según los usados en el dendrograma)
+colors <- c("red", "blue")
+grupos_ward_euclidean$color <- colors[grupos_ward_euclidean$grupo]
+
+
+#hacemos lo mismo con ward+manhattan
+grupos_ward_manhattan <- data.frame(grupo = cutree(hclust_ward_manhattan, k = 2))
+grupos_ward_manhattan$type <- labels$type
+grupos_ward_manhattan$color <- colors[grupos_ward_manhattan$grupo]
+
+
+
+grafico_ward_manhattan <- ggplot(grupos_ward_manhattan, aes(x = type, fill = color))+geom_bar()+
+  labs(title = "Clusters Manhattan + Ward",
+       x = "Enfermedad", y = "Pacientes")+scale_fill_manual(values = c("red" = "red",
+                                                                                "blue" = "blue"
+                                                                                ))
+grafico_ward_manhattan
+
+grafico_ward_euclidean <- ggplot(grupos_ward_euclidean, aes(x = type, fill = color))+geom_bar()+
+  labs(title = "Clusters Euclidiana + Ward",
+       x = "Enfermedad", y = "Pacientes")+scale_fill_manual(values = c("red" = "red",
+                                                                                "blue" = "blue"
+                                                                                ))
+grafico_ward_euclidean
+
+
+graficos_barras <- grid.arrange(grafico_ward_manhattan,grafico_ward_euclidean, nrow = 1 )
+
 
 
 ####CUARTO ALGORITMO: CLUSTERIZACION K-MEANS

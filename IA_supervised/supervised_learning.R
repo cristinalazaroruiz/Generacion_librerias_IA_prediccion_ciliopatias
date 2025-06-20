@@ -307,7 +307,7 @@ curva_error_svmlineal <- ggplot(df_curve_error_svmlineal, aes(x = TrainingSize))
 
 #Dataframe curva de precision
 df_accuracy_svmlinear <- data.frame(
-  TrainingSize = training_sizes_SVMlinear * 100,
+  TrainingSize = training_sizes * 100,
   TrainingAccuracy = train_accuracy_svmlinear,
   ValidationAccuracy = val_accuracy_svmlinear
 )
