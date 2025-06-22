@@ -1,0 +1,2 @@
+En esta carpeta, se encuentra el script en R que se ha usado para generar los datos sobre las ciliopatías. Se han procesado los datos procedentes de la base de datos CiliaMiner, hasta generar los Anexos 1 y 2, donde se encuentra la información sobre las ciliopatías para su procesamiento mediante algoritmos de IA. 
+Sobre el mismo script, se han aplicado diferentes técnicas de aprendizaje no supervisado para explorar los diferentes patrones inherentes a los datos y comprobar la agrupación de los datos en tres tipos: ciliopatías primarias, secundarias y móviles.
