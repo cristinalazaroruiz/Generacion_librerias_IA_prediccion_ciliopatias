@@ -359,7 +359,7 @@ hclust_average_manhattan <- hclust(dist_matrix_manhattan, method = "average")
 
 
 
-colors <- rainbow(3)
+colors <- c("red", "green", "blue")
 clust_ward_euclidean <- fviz_dend(hclust_ward_euclidean,
                                   cex = 0.5,
                                   k = 3, 
@@ -432,42 +432,36 @@ grupos_ward_euclidean <- data.frame(grupo = cutree(hclust_ward_euclidean, k = 3)
 # Paso 2: Añadir la columna de etiquetas
 grupos_ward_euclidean$type <- label$type  
 # Paso 3: Asignar colores a cada grupo (según los usados en el dendrograma)
-colors <- rainbow(3) 
+colors <- c("blue", "red", "green")
 grupos_ward_euclidean$color <- colors[grupos_ward_euclidean$grupo]
 
-
-#cambiar codigo colores por nombre colores
-grupos_ward_euclidean$color_name <- ifelse(
-  grupos_ward_euclidean$color == "#FF0000", "rojo",
-  ifelse(grupos_ward_euclidean$color == "#0000FF", "azul", "verde"))
 
 
 #hacemos lo mismo con ward+manhattan
 grupos_ward_manhattan <- data.frame(grupo = cutree(hclust_ward_manhattan, k = 3))
+colors <- c("blue", "green", "red")
 grupos_ward_manhattan$type <- label$type
 grupos_ward_manhattan$color <- colors[grupos_ward_manhattan$grupo]
-grupos_ward_manhattan$color_name <- ifelse(
-  grupos_ward_manhattan$color == "#FF0000", "rojo",
-  ifelse(grupos_ward_manhattan$color == "#0000FF", "azul", "verde"))
 
 
-grafico_ward_manhattan <- ggplot(grupos_ward_manhattan, aes(x = type, fill = color_name))+geom_bar()+
+
+grafico_ward_manhattan <- ggplot(grupos_ward_manhattan, aes(x = type, fill = color))+geom_bar()+
   labs(title = "Clusters Manhattan + Ward",
-       x = "Tipos de ciliopatía", y = "Pacientes")+scale_fill_manual(values = c("rojo" = "#FF0000",
-                               "azul" = "#0000FF",
-                               "verde" = "#00FF00"))
+       x = "Tipos de ciliopatía", y = "Pacientes")+scale_fill_manual(values = c("red" = "red",
+                               "blue" = "blue",
+                               "green" = "green"))
 
 
-grafico_ward_euclidean <- ggplot(grupos_ward_euclidean, aes(x = type, fill = color_name))+geom_bar()+
+grafico_ward_euclidean <- ggplot(grupos_ward_euclidean, aes(x = type, fill = color))+geom_bar()+
   labs(title = "Clusters Euclidiana + Ward",
-       x = "Tipos de ciliopatía", y = "Pacientes")+scale_fill_manual(values = c("rojo" = "#FF0000",
-                                                                                "azul" = "#0000FF",
-                                                                                "verde" = "#00FF00"))
+       x = "Tipos de ciliopatía", y = "Pacientes")+scale_fill_manual(values = c("red" = "red",
+                                                                                "blue" = "blue",
+                                                                                "green" = "green"))
 
 
 #lo ponemos todo junto
 
-graficos_barras <- grid.arrange(grafico_ward_manhattan,grafico_ward_euclidean, nrow = 1 )
+graficos_barras <- grid.arrange(grafico_ward_euclidean,grafico_ward_manhattan, nrow = 1 )
 
 
 #Kmeans

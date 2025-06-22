@@ -220,6 +220,7 @@ grupos_ward_euclidean$color <- colors[grupos_ward_euclidean$grupo]
 
 
 #hacemos lo mismo con ward+manhattan
+colors <- c("blue", "red")
 grupos_ward_manhattan <- data.frame(grupo = cutree(hclust_ward_manhattan, k = 2))
 grupos_ward_manhattan$type <- labels$type
 grupos_ward_manhattan$color <- colors[grupos_ward_manhattan$grupo]
@@ -240,10 +241,7 @@ grafico_ward_euclidean <- ggplot(grupos_ward_euclidean, aes(x = type, fill = col
                                                                                 ))
 grafico_ward_euclidean
 
-
-graficos_barras <- grid.arrange(grafico_ward_manhattan,grafico_ward_euclidean, nrow = 1 )
-
-
+graficos_barras <- grid.arrange(grafico_ward_euclidean,grafico_ward_manhattan, nrow = 1 )
 
 ####CUARTO ALGORITMO: CLUSTERIZACION K-MEANS
 #distancia euclidiana
