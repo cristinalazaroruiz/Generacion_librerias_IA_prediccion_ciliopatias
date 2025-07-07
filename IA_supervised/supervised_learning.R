@@ -9,7 +9,7 @@ library(gridExtra)
 library(openxlsx)
 
 #PASO 1: CARGAR LOS DATOS
-df <- read_excel("Anexo_5.xlsx")
+df <- read_excel("Anexo_E.xlsx")
 #eliminamos la columna ...1
 df <- df%>%dplyr::select(-...1)
 
@@ -227,7 +227,7 @@ matrices_dataframe$Tasa.Error = c(error_rate_svm_lineal,
 
 
 #guardamos como excel
-write.xlsx(matrices_dataframe, file = "Anexo 7.xlsx", rowNames = TRUE)
+write.xlsx(matrices_dataframe, file = "metricas_confusion.xlsx", rowNames = TRUE)
 
 
 df.confusion.svmlinear <- as.data.frame(svmlinear.matrix$table)

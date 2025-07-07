@@ -185,5 +185,5 @@ if __name__ == "__main__":
     df_hpo.to_excel("HPO_enfermedad.xlsx", index=False)
 
     #Guardar enfermedades sin ciliopatias
-    df_hpo_sin_ciliopatias.to_excel("Anexo_3.xlsx")
+    df_hpo_sin_ciliopatias.to_excel("Anexo_C.xlsx")
 

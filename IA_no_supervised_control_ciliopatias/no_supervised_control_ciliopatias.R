@@ -16,8 +16,8 @@ library(cluster)
 
 
 #Cargar los conjuntos de datos (control y ciliopatias)
-ciliopatias <- read.csv("Anexo_2.csv")
-control <- read_excel("Anexo_4.xlsx")
+ciliopatias <- read.csv("Anexo_B.csv")
+control <- read_excel("Anexo_D.xlsx")
 
 #para que los nombres de las columnas esten igual, hay que cambiar espacios por puntos
 colnames(control) <- gsub(" ", ".", colnames(control))
@@ -40,7 +40,7 @@ ciliopatias["type"] <- ciliopathy_column
 #Ahora fusionamos ambos dataframes
 df <- rbind(control, ciliopatias)
 
-write.xlsx(df, rowNames = TRUE, "Anexo_5.xlsx")
+write.xlsx(df, rowNames = TRUE, "Anexo_E.xlsx")
 
 ################################################################################
 #                         Algoritmos de aprendizaje no supervisado

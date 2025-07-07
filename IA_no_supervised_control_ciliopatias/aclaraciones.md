@@ -1,2 +1,2 @@
-En esta carpeta se han fusionado los Anexos 2 y 5, para dar lugar al Anexo 6, que contiene la información de las ciliopatías y otras enfermedades control, con una serie de variables clínicas. 
+En esta carpeta se han fusionado los Anexos B y D, para dar lugar al Anexo E, que contiene la información de las ciliopatías y otras enfermedades control, con una serie de variables clínicas. 
 Sobre este dataset, se han aplicado diferentes técnicas de aprendizaje no supervisado para estudiar los posibles patrones inherentes a los datos y comprobar el solapamiento entre ambos grupos de enfermedades (ciliopatías y otras enfermedades). 

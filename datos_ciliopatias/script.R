@@ -212,8 +212,8 @@ for (i in 1:511){
 }
 
 df_general2 <- df_general2 %>%select(-Localisation.Reference, -Human.Gene.ID)
-#Guardamos df_general2 como el Anexo1
-write.csv(df_general2, file = "Anexo_1.csv")
+#Guardamos df_general2 como el Anexo A
+write.csv(df_general2, file = "Anexo_A.csv")
 
 ################################################################################
 #                     Aprendizaje no supervisado
@@ -251,9 +251,9 @@ any(is.na(df_no_supervised)) #No hay datos faltantes
 #Nos aseguramos que no haya columnas con todo 0
 any(colSums(df_no_supervised) == 0)
 
-#Guardamos como anexo 2 la version que si tiene las labels
+#Guardamos como anexo B la version que si tiene las labels
 anexo_2 <- cbind(df_no_supervised, label)
-write.csv(anexo_2, file = "Anexo_2.csv")
+write.csv(anexo_2, file = "Anexo_B.csv")
 
 #Escalado
 df_no_supervised_scaled <- as.data.frame(scale(df_no_supervised))
