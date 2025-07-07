@@ -9,7 +9,7 @@ library(gridExtra)
 library(openxlsx)
 
 #PASO 1: CARGAR LOS DATOS
-df <- read_excel("Anexo_6.xlsx")
+df <- read_excel("Anexo_5.xlsx")
 #eliminamos la columna ...1
 df <- df%>%dplyr::select(-...1)
 

@@ -269,7 +269,7 @@ fviz_eig(pca.result, labels = TRUE)
 tabla_eigenvalues <- get_eigenvalue(pca.result)
 df_eigenvalues <- as.data.frame(tabla_eigenvalues)
 colnames(df_eigenvalues) <- c("eigenvalues", "porcentaje varianza", "varianza acumulada")
-write.xlsx(df_eigenvalues, rowNames = TRUE, "Anexo3.xlsx")
+write.xlsx(df_eigenvalues, rowNames = TRUE, "eigenvalues.xlsx")
 pca.df <- as.data.frame(pca.result$x)
 var <- pca.result$sdev^2
 var_explicada <- var/sum(var)
@@ -298,7 +298,7 @@ print(KMO_parameter)
 df_KMO <- as.data.frame(KMO_parameter$MSAi)
 colnames(df_KMO) <- "KMO"
 df_KMO$KMO <- round(df_KMO$KMO, 2)
-write.xlsx(df_KMO, rowNames = TRUE, "KMO.xlsx")
+write.xlsx(df_KMO, rowNames = TRUE, "KMO_1.xlsx")
 
 #Criterio:
   

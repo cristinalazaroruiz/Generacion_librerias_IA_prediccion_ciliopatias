@@ -17,7 +17,7 @@ library(cluster)
 
 #Cargar los conjuntos de datos (control y ciliopatias)
 ciliopatias <- read.csv("Anexo_2.csv")
-control <- read_excel("Anexo_5.xlsx")
+control <- read_excel("Anexo_4.xlsx")
 
 #para que los nombres de las columnas esten igual, hay que cambiar espacios por puntos
 colnames(control) <- gsub(" ", ".", colnames(control))
@@ -40,7 +40,7 @@ ciliopatias["type"] <- ciliopathy_column
 #Ahora fusionamos ambos dataframes
 df <- rbind(control, ciliopatias)
 
-write.xlsx(df, rowNames = TRUE, "Anexo_6.xlsx")
+write.xlsx(df, rowNames = TRUE, "Anexo_5.xlsx")
 
 ################################################################################
 #                         Algoritmos de aprendizaje no supervisado
@@ -67,7 +67,7 @@ df_eigenvalues <- as.data.frame(tabla_eigenvalues)
 
 colnames(df_eigenvalues) <- c("eigenvalues", "porcentaje varianza", "varianza acumulada")
 
-write.xlsx(df_eigenvalues, rowNames = TRUE, "Anexo_7.xlsx")
+write.xlsx(df_eigenvalues, rowNames = TRUE, "eigenvalues_2.xlsx")
 
 pca.df <- as.data.frame(pca.result$x)
 var <- pca.result$sdev^2
